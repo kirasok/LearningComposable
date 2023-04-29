@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -88,7 +89,29 @@ fun Article() {
 
 @Composable
 fun TaskManager() {
-    Text("TODO")
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_task_completed),
+                contentDescription = "Task Completed Icon"
+            )
+            Text(
+                text = "All tasks completed",
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 24.dp, bottom = 8.dp)
+            )
+            Text(
+                text = "Nice work!",
+                fontSize = 16.sp
+            )
+        }
+    }
 }
 
 @Composable
