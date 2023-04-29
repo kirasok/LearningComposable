@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,11 +38,9 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = "root") {
                 composable("root") {
-                    Root(
-                        { navController.navigate("article") },
+                    Root({ navController.navigate("article") },
                         { navController.navigate("task-manager") },
-                        { navController.navigate("quadrant") }
-                    )
+                        { navController.navigate("quadrant") })
                 }
                 composable("article") {
                     Article()
@@ -59,8 +59,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Article() {
     Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
     ) {
         Column() {
             Image(
@@ -90,8 +89,7 @@ fun Article() {
 @Composable
 fun TaskManager() {
     Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -107,8 +105,7 @@ fun TaskManager() {
                 modifier = Modifier.padding(top = 24.dp, bottom = 8.dp)
             )
             Text(
-                text = "Nice work!",
-                fontSize = 16.sp
+                text = "Nice work!", fontSize = 16.sp
             )
         }
     }
@@ -116,7 +113,55 @@ fun TaskManager() {
 
 @Composable
 fun Quadrant() {
-    Text("TODO")
+    Surface {
+        Column {
+            Row(modifier = Modifier.weight(weight = 1.0F, fill = true)) {
+                Corner(
+                    title = "Text composable",
+                    description = "Displays text and follows Material Design guidelines.",
+                    color = Color.Green,
+                    modifier = Modifier.weight(weight = 1.0F, fill = true)
+                )
+                Corner(
+                    title = "Image composable",
+                    description = "Creates a composable that lays out and draws a given Painter class object.",
+                    color = Color.Yellow,
+                    modifier = Modifier.weight(weight = 1.0F, fill = true)
+                )
+            }
+            Row(modifier = Modifier.weight(weight = 1.0F, fill = true)) {
+                Corner(
+                    title = "Row composable",
+                    description = "A layout composable that places its children in a horizontal sequence.",
+                    color = Color.Cyan,
+                    modifier = Modifier.weight(weight = 1.0F, fill = true)
+                )
+                Corner(
+                    title = "Column composable",
+                    description = "A layout composable that places its children in a vertical sequence.",
+                    color = Color.LightGray,
+                    modifier = Modifier.weight(weight = 1.0F, fill = true)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun Corner(title: String, description: String, color: Color, modifier: Modifier) {
+    Surface(
+        color = color, modifier = modifier
+            .fillMaxSize()
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(text = title, fontWeight = FontWeight.Bold, modifier = Modifier.padding(16.dp))
+            Text(text = description, textAlign = TextAlign.Justify)
+        }
+    }
 }
 
 @Composable
