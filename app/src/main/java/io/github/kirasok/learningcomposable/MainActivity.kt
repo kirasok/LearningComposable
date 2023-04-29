@@ -1,29 +1,46 @@
 package io.github.kirasok.learningcomposable
 
+import android.graphics.drawable.Icon
 import android.os.Bundle
+import android.telephony.PhoneNumberUtils
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
@@ -38,9 +55,12 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = "root") {
                 composable("root") {
-                    Root({ navController.navigate("article") },
+                    Root(
+                        { navController.navigate("article") },
                         { navController.navigate("task-manager") },
-                        { navController.navigate("quadrant") })
+                        { navController.navigate("quadrant") },
+                        { navController.navigate("business-card") },
+                    )
                 }
                 composable("article") {
                     Article()
@@ -50,6 +70,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("quadrant") {
                     Quadrant()
+                }
+                composable("business-card") {
+                    BusinessCard()
                 }
             }
         }
@@ -165,10 +188,72 @@ fun Corner(title: String, description: String, color: Color, modifier: Modifier)
 }
 
 @Composable
+fun BusinessCard() {
+    Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFF1B2F3D)) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.android_logo),
+                contentDescription = "Android Logo",
+                modifier = Modifier
+                    .height(256.dp)
+                    .width(256.dp)
+            )
+            Text(
+                text = "Kirill Mokretsov",
+                color = Color.White,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = "Android Developer",
+                color = Color.White,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+        Column(
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp, start = 64.dp, end = 64.dp)
+        ) {
+            Contact(
+                contact = PhoneNumberUtils.formatNumber("+7 (000) 000-00-00", "RU"),
+                icon = Icons.Default.Phone,
+                contentDescriptor = "Phone"
+            )
+            Contact(
+                contact = "github.com/kirasok",
+                icon = Icons.Default.AccountCircle,
+                contentDescriptor = "Account"
+            )
+            Contact(
+                contact = "kirill.mokretsov@protonmail.ch",
+                icon = Icons.Default.Email,
+                contentDescriptor = "Email"
+            )
+        }
+    }
+}
+
+@Composable
+fun Contact(contact: String, icon: ImageVector, contentDescriptor: String) {
+    Row(modifier = Modifier.padding(bottom = 8.dp)) {
+        Icon(icon, contentDescription = contentDescriptor, tint = Color.White)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = contact, color = Color.White)
+    }
+}
+
+@Composable
 fun Root(
     onNavigateToArticle: () -> Unit,
     onNavigateToTaskManager: () -> Unit,
-    onNavigateToQuadrant: () -> Unit
+    onNavigateToQuadrant: () -> Unit,
+    onNavigateToBusinessCard: () -> Unit
 ) {
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(
@@ -183,6 +268,9 @@ fun Root(
             }
             Button(onClick = onNavigateToQuadrant) {
                 Text(text = "Quadrant")
+            }
+            Button(onClick = onNavigateToBusinessCard) {
+                Text(text = "Business Card")
             }
         }
     }
